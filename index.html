@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory Ops · CARS24 Huddle Dashboard</title>
+    <title>CARS24 Inventory Ops · Intelligence Hub</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
@@ -12,153 +12,141 @@
             --cars24-secondary: #f77f00;
             --cars24-accent: #06a77d;
             --bg-beige: #f5f1ed;
-            --panel-bg: #fefdfb;
+            --newspaper-bg: #faf8f3;
+            --card-bg: #fefdfb;
             --text-main: #2b2520;
             --text-muted: #6b6360;
             --border-color: #e8dfd6;
             --red-alert: #d32f2f;
             --amber-alert: #f57c00;
             --green-ok: #2e7d32;
-            --hover-bg: #ede8e0;
             --shadow: 0 2px 8px rgba(230, 57, 70, 0.08);
         }
 
         * { box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-beige);
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, var(--newspaper-bg) 0%, var(--bg-beige) 100%);
             color: var(--text-main);
             margin: 0;
             padding: 20px;
         }
 
-        header {
+        .masthead {
+            background: linear-gradient(135deg, var(--cars24-primary) 0%, #c1121f 100%);
+            color: white;
+            padding: 30px 40px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            text-align: center;
+            border-bottom: 5px solid var(--cars24-secondary);
+        }
+
+        .masthead h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        .masthead-subtitle {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(135deg, var(--cars24-primary) 0%, #c1121f 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
-        }
-
-        .header-left h1 {
-            margin: 0;
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .header-left p {
-            margin: 5px 0 0 0;
+            margin-top: 15px;
             font-size: 0.9rem;
-            opacity: 0.95;
+            padding-top: 15px;
+            border-top: 2px solid rgba(255,255,255,0.3);
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
-        .header-right {
+        .snowflake-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(255,255,255,0.4);
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 6px;
         }
 
-        .timestamp-box {
-            background: rgba(255,255,255,0.15);
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            text-align: right;
-            border: 1px solid rgba(255,255,255,0.3);
+        .sync-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #4caf50;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
         }
 
-        .timestamp-box .refresh-time {
-            font-weight: 600;
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
-        .timestamp-box .update-status {
-            font-size: 0.75rem;
-            opacity: 0.9;
-        }
-
-        .tabs {
+        .controls {
             display: flex;
-            gap: 10px;
-        }
-
-        .tab {
-            background: rgba(255,255,255,0.2);
-            border: 2px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 8px 16px;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.3s;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .tab:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
-        .tab.active {
-            background: white;
-            color: var(--cars24-primary);
-            border-color: white;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
         .btn {
-            background: white;
+            background: linear-gradient(135deg, var(--cars24-primary), #c1121f);
             border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
+            padding: 12px 24px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            color: var(--cars24-primary);
-            transition: all 0.2s;
+            color: white;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(230, 57, 70, 0.3);
         }
 
         .btn:hover {
-            background: var(--cars24-secondary);
-            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(230, 57, 70, 0.4);
         }
 
-        .alert-banner {
-            background: linear-gradient(135deg, #ffebee 0%, #fff3e0 100%);
-            border-left: 5px solid var(--cars24-primary);
-            padding: 15px 20px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            box-shadow: 0 1px 4px rgba(230, 57, 70, 0.1);
+        .btn.secondary {
+            background: linear-gradient(135deg, var(--cars24-secondary), #e67e22);
         }
 
-        .alert-banner h3 {
-            margin: 0 0 10px 0;
-            color: var(--cars24-primary);
-            font-size: 1rem;
+        .tab-nav {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
         }
 
-        .alert-banner ul {
-            margin: 0;
-            padding-left: 20px;
-            color: var(--text-main);
-            font-size: 0.9rem;
-            line-height: 1.6;
+        .tab-btn {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.3s;
         }
 
-        .alert-banner li {
-            margin-bottom: 8px;
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--cars24-primary), #c1121f);
+            color: white;
+            border-color: var(--cars24-primary);
+        }
+
+        .tab-btn:hover {
+            border-color: var(--cars24-primary);
         }
 
         .view-section {
@@ -167,124 +155,199 @@
 
         .view-section.active {
             display: block;
+            animation: fadeIn 0.3s;
         }
 
-        .grid-top {
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* NEWSPAPER LAYOUT */
+        .newspaper-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
         }
 
-        .card {
-            background-color: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            padding: 18px;
+        .newspaper-article {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            padding: 0;
             border-radius: 8px;
+            overflow: hidden;
             box-shadow: var(--shadow);
             transition: all 0.3s;
+            position: relative;
         }
 
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(230, 57, 70, 0.12);
+        .newspaper-article:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(230, 57, 70, 0.15);
         }
 
-        .card h3 {
-            margin: 0 0 12px 0;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 600;
-        }
-
-        .metric-main {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin: 0;
-            color: var(--cars24-primary);
-        }
-
-        .metric-sub {
-            font-size: 0.85rem;
-            margin-top: 8px;
-            color: var(--text-muted);
-        }
-
-        .trend-up {
-            color: var(--green-ok);
-            font-weight: 600;
-        }
-
-        .trend-down {
-            color: var(--red-alert);
-            font-weight: 600;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: var(--panel-bg);
-            border-radius: 6px;
-            overflow: hidden;
-            font-size: 0.9rem;
-            box-shadow: var(--shadow);
-        }
-
-        th, td {
-            text-align: left;
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        th {
-            color: white;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            font-weight: 600;
+        .article-header {
             background: linear-gradient(135deg, var(--cars24-primary) 0%, #c1121f 100%);
+            color: white;
+            padding: 15px;
+            border-bottom: 3px solid var(--cars24-secondary);
         }
 
-        tbody tr {
-            cursor: pointer;
-            transition: background-color 0.2s;
+        .article-header h2 {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 700;
         }
 
-        tbody tr:hover {
-            background-color: var(--hover-bg);
+        .article-header .subtitle {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            margin-top: 5px;
         }
 
-        tbody tr.clickable:hover {
-            background-color: rgba(230, 57, 70, 0.08);
+        .article-body {
+            padding: 20px;
         }
 
-        .status-red {
+        .metric-highlight {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--cars24-primary);
+            margin: 15px 0;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        .status-critical {
+            background: rgba(211, 47, 47, 0.15);
             color: var(--red-alert);
-            font-weight: 700;
         }
 
-        .status-amber {
+        .status-warning {
+            background: rgba(245, 124, 0, 0.15);
             color: var(--amber-alert);
-            font-weight: 700;
         }
 
-        .status-green {
+        .status-normal {
+            background: rgba(46, 125, 50, 0.15);
             color: var(--green-ok);
-            font-weight: 700;
         }
 
-        .chart-container {
-            background-color: var(--panel-bg);
-            border: 1px solid var(--border-color);
+        /* ACTION CARD STYLE */
+        .action-card {
+            background: var(--card-bg);
+            border: 3px solid var(--cars24-primary);
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 20px;
-            box-shadow: var(--shadow);
             position: relative;
-            height: 400px;
+            overflow: hidden;
         }
 
+        .action-card::before {
+            content: '⚡';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 4rem;
+            opacity: 0.1;
+        }
+
+        .action-card h3 {
+            margin: 0 0 15px 0;
+            color: var(--cars24-primary);
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .root-cause-analysis {
+            background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+            border-left: 5px solid var(--cars24-secondary);
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .root-cause-analysis strong {
+            color: var(--cars24-primary);
+        }
+
+        /* INDIA MAP */
+        .map-container {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .zone-box {
+            display: inline-block;
+            margin: 10px;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .zone-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(230, 57, 70, 0.2);
+        }
+
+        .zone-box.zone-north { background: linear-gradient(135deg, rgba(230, 57, 70, 0.1), rgba(230, 57, 70, 0.05)); border-color: var(--cars24-primary); }
+        .zone-box.zone-mhap { background: linear-gradient(135deg, rgba(247, 127, 0, 0.1), rgba(247, 127, 0, 0.05)); border-color: var(--cars24-secondary); }
+        .zone-box.zone-west { background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 193, 7, 0.05)); border-color: #ffc107; }
+        .zone-box.zone-blr { background: linear-gradient(135deg, rgba(46, 125, 50, 0.1), rgba(46, 125, 50, 0.05)); border-color: var(--green-ok); }
+        .zone-box.zone-east { background: linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(33, 150, 243, 0.05)); border-color: #2196f3; }
+        .zone-box.zone-south { background: linear-gradient(135deg, rgba(156, 39, 176, 0.1), rgba(156, 39, 176, 0.05)); border-color: #9c27b0; }
+
+        .zone-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--cars24-primary);
+            margin: 0;
+        }
+
+        .zone-metric {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--cars24-primary);
+            margin: 10px 0;
+        }
+
+        .zone-status {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* DRILL-DOWN MODAL */
         .modal {
             display: none;
             position: fixed;
@@ -293,7 +356,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0,0,0,0.6);
             overflow-y: auto;
         }
 
@@ -302,29 +365,30 @@
         }
 
         .modal-content {
-            background-color: var(--panel-bg);
-            margin: 5% auto;
-            padding: 25px;
-            border: 1px solid var(--border-color);
+            background: linear-gradient(135deg, var(--newspaper-bg) 0%, var(--card-bg) 100%);
+            margin: 20px auto;
+            padding: 0;
             width: 90%;
-            max-width: 900px;
+            max-width: 1200px;
             border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 3px solid var(--cars24-primary);
         }
 
         .modal-header {
+            background: linear-gradient(135deg, var(--cars24-primary) 0%, #c1121f 100%);
+            color: white;
+            padding: 20px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--border-color);
+            border-bottom: 3px solid var(--cars24-secondary);
         }
 
         .modal-header h2 {
             margin: 0;
-            color: var(--cars24-primary);
-            font-size: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 700;
         }
 
         .close-btn {
@@ -332,499 +396,736 @@
             border: none;
             font-size: 2rem;
             cursor: pointer;
-            color: var(--text-muted);
+            color: white;
         }
 
         .close-btn:hover {
-            color: var(--cars24-primary);
+            opacity: 0.8;
         }
 
-        .transaction-list {
-            max-height: 500px;
+        .modal-body {
+            padding: 25px;
+            max-height: 70vh;
             overflow-y: auto;
         }
 
-        .transaction-item {
+        .unit-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .unit-table thead {
+            background: linear-gradient(135deg, var(--cars24-primary) 0%, #c1121f 100%);
+            color: white;
+        }
+
+        .unit-table th, .unit-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .unit-table tbody tr:hover {
+            background-color: rgba(230, 57, 70, 0.08);
+        }
+
+        .in-depth-analysis {
+            background: linear-gradient(135deg, #f0f7ff 0%, #f5f1ed 100%);
+            border: 2px solid var(--cars24-accent);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .analysis-section {
+            margin-bottom: 20px;
+        }
+
+        .analysis-section h4 {
+            color: var(--cars24-primary);
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .chart-wrapper {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            position: relative;
+            height: 300px;
+        }
+
+        .breadcrumb {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            padding: 10px;
             background: var(--bg-beige);
-            padding: 12px;
-            margin-bottom: 10px;
             border-radius: 4px;
             border-left: 4px solid var(--cars24-primary);
         }
 
-        .transaction-item strong {
+        .breadcrumb a {
+            color: var(--cars24-primary);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .refresh-status {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .snowflake-sync {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .sync-time {
+            font-weight: 700;
             color: var(--cars24-primary);
         }
 
-        .loading-spinner {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            background: radial-gradient(circle, var(--cars24-primary) 20%, transparent 20%);
-            border-radius: 100%;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
         @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
+            .masthead {
+                padding: 20px;
             }
 
-            .header-right {
-                width: 100%;
+            .masthead h1 {
+                font-size: 1.8rem;
+            }
+
+            .masthead-subtitle {
                 flex-direction: column;
                 gap: 10px;
+                text-align: center;
             }
 
-            .tabs {
+            .tab-nav {
                 flex-direction: column;
-                width: 100%;
             }
 
-            .tab {
-                width: 100%;
+            .modal-content {
+                width: 95%;
             }
 
-            .grid-top {
-                grid-template-columns: 1fr;
+            .zone-box {
+                margin: 10px auto;
+                display: block;
             }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="header-left">
-            <h1>🚗 CARS24 Inventory Ops</h1>
-            <p>Huddle Dashboard · Real-time Performance Tracking</p>
-        </div>
-        <div class="header-right">
-            <div class="timestamp-box">
-                <div class="refresh-time" id="current-time">20-MAY-2026 14:32</div>
-                <div class="update-status" id="update-status">Last refresh: <span class="loading-spinner"></span></div>
+    <!-- MASTHEAD -->
+    <div class="masthead">
+        <h1>📊 CARS24 Intelligence Hub</h1>
+        <div class="masthead-subtitle">
+            <span>Inventory Operations Dashboard · Real-Time Performance Analytics</span>
+            <div class="snowflake-badge">
+                <span class="sync-indicator"></span>
+                Powered by Snowflake | Auto-sync Every 8 Hours
             </div>
-            <div class="tabs">
-                <button class="tab active" onclick="switchTab('leadership')">Leadership</button>
-                <button class="tab" onclick="switchTab('analysis')">Analysis</button>
-                <button class="tab" onclick="switchTab('trends')">Trends</button>
-            </div>
-            <div class="action-buttons">
-                <button class="btn" onclick="exportCSV()">📥 CSV</button>
-                <button class="btn" onclick="exportPDF()">📄 PDF</button>
-            </div>
-        </div>
-    </header>
-
-    <div id="alert-container" class="alert-banner" style="display: none;">
-        <h3>⚠️ Critical Anomalies Detected</h3>
-        <ul id="alert-list"></ul>
-    </div>
-
-    <!-- LEADERSHIP VIEW -->
-    <div id="leadership" class="view-section active">
-        <div class="grid-top">
-            <div class="card">
-                <h3>Total SI (MTD)</h3>
-                <p class="metric-main">5,505</p>
-                <p class="metric-sub trend-up">↑ +0.2% vs LMTD</p>
-            </div>
-            <div class="card">
-                <h3>Total PR / Tokens (MTD)</h3>
-                <p class="metric-main">7,467</p>
-                <p class="metric-sub trend-down">↓ -1.2% vs LMTD</p>
-            </div>
-            <div class="card">
-                <h3>Non-GS Inspections (MTD)</h3>
-                <p class="metric-main">37,336</p>
-                <p class="metric-sub trend-down">↓ -7.6% vs LMTD</p>
-            </div>
-            <div class="card">
-                <h3>Avg Acceptance Rate</h3>
-                <p class="metric-main">12.4%</p>
-                <p class="metric-sub trend-down">↓ -2.1% vs LMTD</p>
-            </div>
-        </div>
-
-        <div class="card" style="padding: 0;">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Zone</th>
-                        <th>Leader</th>
-                        <th>MTD SI</th>
-                        <th>LMTD SI</th>
-                        <th>Uplift %</th>
-                        <th>Current Tier</th>
-                    </tr>
-                </thead>
-                <tbody id="leadership-tbody"></tbody>
-            </table>
+            <div>Last Updated: <span class="sync-time" id="sync-time">20-MAY-2026 14:32</span></div>
         </div>
     </div>
 
-    <!-- REGIONAL ANALYSIS VIEW -->
+    <!-- REFRESH STATUS -->
+    <div class="refresh-status">
+        <div class="snowflake-sync">
+            📡 Snowflake Connection: <span style="color: var(--green-ok); font-weight: 700;">ACTIVE</span> | 
+            Next Auto-Sync: <span class="sync-time" id="next-sync">02:32 (in 8h)</span>
+        </div>
+        <div class="controls">
+            <button class="btn secondary" onclick="manualSync()">🔄 Force Sync Now</button>
+            <button class="btn" onclick="exportReport()">📥 Export Report</button>
+        </div>
+    </div>
+
+    <!-- TAB NAVIGATION -->
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchView('zones')">🗺️ Zone Map</button>
+        <button class="tab-btn" onclick="switchView('dashboard')">📰 Dashboard</button>
+        <button class="tab-btn" onclick="switchView('analysis')">🔍 Deep Analysis</button>
+    </div>
+
+    <!-- ZONE MAP VIEW -->
+    <div id="zones" class="view-section active">
+        <div class="map-container">
+            <h3 style="color: var(--cars24-primary); margin-top: 0;">🗺️ Zone Performance Overview · Click to Drill Down</h3>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+                <div class="zone-box zone-north" onclick="openZoneModal('North')">
+                    <div class="zone-name">North</div>
+                    <div class="zone-metric">2,363</div>
+                    <div class="zone-status">MTD SI | +3.8%</div>
+                </div>
+                <div class="zone-box zone-mhap" onclick="openZoneModal('MH & AP')">
+                    <div class="zone-name">MH & AP</div>
+                    <div class="zone-metric">1,133</div>
+                    <div class="zone-status">MTD SI | -1.6%</div>
+                </div>
+                <div class="zone-box zone-west" onclick="openZoneModal('West')">
+                    <div class="zone-name">West</div>
+                    <div class="zone-metric">734</div>
+                    <div class="zone-status">MTD SI | -2.0%</div>
+                </div>
+                <div class="zone-box zone-blr" onclick="openZoneModal('BLR')">
+                    <div class="zone-name">BLR</div>
+                    <div class="zone-metric">483</div>
+                    <div class="zone-status">MTD SI | -7.3%</div>
+                </div>
+                <div class="zone-box zone-east" onclick="openZoneModal('East')">
+                    <div class="zone-name">East</div>
+                    <div class="zone-metric">443</div>
+                    <div class="zone-status">MTD SI | +0.7%</div>
+                </div>
+                <div class="zone-box zone-south" onclick="openZoneModal('South')">
+                    <div class="zone-name">South</div>
+                    <div class="zone-metric">349</div>
+                    <div class="zone-status">MTD SI | -1.1%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="newspaper-grid">
+            <div class="newspaper-article">
+                <div class="article-header">
+                    <h2>🏆 Top Performer</h2>
+                    <div class="subtitle">Highest SI Growth</div>
+                </div>
+                <div class="article-body">
+                    <div class="metric-label">Zone</div>
+                    <div class="metric-highlight">North</div>
+                    <div style="margin: 10px 0; line-height: 1.6;">
+                        <strong>MTD SI:</strong> 2,363<br>
+                        <strong>Growth:</strong> +3.8% vs LMTD<br>
+                        <strong>Leader:</strong> Aashendra & Dashrath
+                    </div>
+                    <span class="status-badge status-warning">BASELINE</span>
+                </div>
+            </div>
+            <div class="newspaper-article">
+                <div class="article-header">
+                    <h2>⚠️ Needs Attention</h2>
+                    <div class="subtitle">Largest Decline</div>
+                </div>
+                <div class="article-body">
+                    <div class="metric-label">Zone</div>
+                    <div class="metric-highlight">BLR</div>
+                    <div style="margin: 10px 0; line-height: 1.6;">
+                        <strong>MTD SI:</strong> 483<br>
+                        <strong>Decline:</strong> -7.3% vs LMTD<br>
+                        <strong>Leader:</strong> Edwin
+                    </div>
+                    <span class="status-badge status-critical">CRITICAL</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD VIEW -->
+    <div id="dashboard" class="view-section">
+        <div class="newspaper-grid">
+            <div class="newspaper-article">
+                <div class="article-header">
+                    <h2>📈 Total SI (MTD)</h2>
+                    <div class="subtitle">Month-to-Date Stock-ins</div>
+                </div>
+                <div class="article-body">
+                    <div class="metric-highlight">5,505</div>
+                    <div style="margin: 15px 0; line-height: 1.8;">
+                        <strong style="color: var(--green-ok);">↑ +0.2%</strong> vs Last Month<br>
+                        <small style="color: var(--text-muted);">Baseline: 5,491 units</small>
+                    </div>
+                    <span class="status-badge status-normal">ON TRACK</span>
+                </div>
+            </div>
+
+            <div class="newspaper-article">
+                <div class="article-header">
+                    <h2>🎫 PR / Tokens (MTD)</h2>
+                    <div class="subtitle">Purchase Requests Processed</div>
+                </div>
+                <div class="article-body">
+                    <div class="metric-highlight">7,467</div>
+                    <div style="margin: 15px 0; line-height: 1.8;">
+                        <strong style="color: var(--red-alert);">↓ -1.2%</strong> vs Last Month<br>
+                        <small style="color: var(--text-muted);">Baseline: 7,552 tokens</small>
+                    </div>
+                    <span class="status-badge status-warning">REVIEW NEEDED</span>
+                </div>
+            </div>
+
+            <div class="newspaper-article">
+                <div class="article-header">
+                    <h2>🔍 Non-GS Inspections</h2>
+                    <div class="subtitle">Non-Group Standard Checks</div>
+                </div>
+                <div class="article-body">
+                    <div class="metric-highlight">37,336</div>
+                    <div style="margin: 15px 0; line-height: 1.8;">
+                        <strong style="color: var(--red-alert);">↓ -7.6%</strong> vs Last Month<br>
+                        <small style="color: var(--text-muted);">Baseline: 40,382 inspections</small>
+                    </div>
+                    <span class="status-badge status-warning">DECLINING TREND</span>
+                </div>
+            </div>
+
+            <div class="newspaper-article">
+                <div class="article-header">
+                    <h2>✅ Avg Acceptance Rate</h2>
+                    <div class="subtitle">Acceptance Percentage</div>
+                </div>
+                <div class="article-body">
+                    <div class="metric-highlight">12.4%</div>
+                    <div style="margin: 15px 0; line-height: 1.8;">
+                        <strong style="color: var(--red-alert);">↓ -2.1%</strong> vs Last Month<br>
+                        <small style="color: var(--text-muted);">Baseline: 12.7%</small>
+                    </div>
+                    <span class="status-badge status-warning">DECLINING</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACTION CARDS WITH ROOT CAUSE ANALYSIS -->
+        <div class="action-card">
+            <h3>🚨 CRITICAL ANOMALY: NDL Region</h3>
+            <div class="root-cause-analysis">
+                <strong>Symptom:</strong> Inspections collapsed 74% → 190 units (vs. typical 750+). However, Raises surged to 1,761 (RPI: 9.26).
+                <br><br>
+                <strong>Root Cause Analysis:</strong>
+                <br>• <strong>Data Gaming Risk:</strong> Unusually high raise-to-inspection ratio suggests possible manipulation or system error
+                <br>• <strong>Quality Anomaly:</strong> 9.26 RPI is 4-5x normal range (typical: 1.5-2.5), indicating systemic quality issues
+                <br>• <strong>Operational Issue:</strong> Possible staffing shortage or process breakdown leading to incomplete inspections
+                <br>• <strong>System Integration:</strong> Potential data feed error between inspection and raise systems
+                <br><br>
+                <strong>Recommended Actions:</strong> Immediate audit of NDL inspection process, verify data integrity, review recent staffing changes, escalate to compliance
+            </div>
+        </div>
+
+        <div class="action-card">
+            <h3>⚠️ ALERT: MUM Region Tokenization Friction</h3>
+            <div class="root-cause-analysis">
+                <strong>Symptom:</strong> Acceptance rate spiked to 23%, but A2C% (Acceptance-to-Confirmation) crashed to 13.5%.
+                <br><br>
+                <strong>Root Cause Analysis:</strong>
+                <br>• <strong>Backend Processing Delay:</strong> Acceptances are being recorded but tokenization is lagging by 4-8 hours
+                <br>• <strong>Third-party Integration Issue:</strong> External payment gateway or tokenization service experiencing slowdown (potential timeout)
+                <br>• <strong>Data Validation Failure:</strong> 34 acceptances failed to convert—possible compliance/KYC document upload issues
+                <br>• <strong>Network Bottleneck:</strong> API rate limiting or connection timeout between MUM hub and payment processor (Razorpay/BillDesk)
+                <br><br>
+                <strong>Recommended Actions:</strong> Check payment processor status, review API logs for timeout errors, verify KYC data completeness, contact fintech partner
+            </div>
+        </div>
+
+        <div class="action-card">
+            <h3>🔴 CRITICAL: BLR Payment Gateway Failure</h3>
+            <div class="root-cause-analysis">
+                <strong>Symptom:</strong> 34 acceptances failed to tokenize. A2C% dropped from 59.6% → 27.7% (a 53% collapse).
+                <br><br>
+                <strong>Root Cause Analysis:</strong>
+                <br>• <strong>Payment Gateway Outage:</strong> 34 failed tokens suggest partial or complete service degradation in Bangalore cluster
+                <br>• <strong>Compliance Gate Issue:</strong> Recent regulatory change (RBI/NPA guidelines) blocking specific transaction types or amounts
+                <br>• <strong>Database Deadlock:</strong> Possible database lock or transaction rollback affecting tokenization microservice
+                <br>• <strong>Regional Restriction:</strong> Geographic rate limiting or ISP-level block on fintech transactions from specific networks
+                <br><br>
+                <strong>Recommended Actions:</strong> Check payment processor status page immediately, review error logs, contact acquirer (HDFC/ICICI), verify compliance settings, consider failover to backup processor
+            </div>
+        </div>
+    </div>
+
+    <!-- DEEP ANALYSIS VIEW -->
     <div id="analysis" class="view-section">
-        <div class="grid-top" style="grid-template-columns: 1fr;">
-            <div class="card">
-                <h3 style="color: var(--red-alert);">📊 Regional Performance Metrics</h3>
-                <p style="color: var(--text-muted); margin: 10px 0; font-size: 0.9rem;">
-                    Click on any region to view detailed transaction history
-                </p>
+        <div class="in-depth-analysis">
+            <div class="analysis-section">
+                <h4>📊 Regional SI Trend Analysis</h4>
+                <div class="chart-wrapper">
+                    <canvas id="regionalTrendChart"></canvas>
+                </div>
             </div>
-        </div>
 
-        <div class="card" style="padding: 0;">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Region</th>
-                        <th>Inspections (D-1)</th>
-                        <th>Raises (D-1)</th>
-                        <th>Acceptance %</th>
-                        <th>PR (Tokens)</th>
-                        <th>SI (Stock-ins)</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="regional-tbody"></tbody>
-            </table>
+            <div class="analysis-section">
+                <h4>📈 Acceptance vs Tokenization Correlation</h4>
+                <div class="chart-wrapper">
+                    <canvas id="correlationChart"></canvas>
+                </div>
+            </div>
+
+            <div class="analysis-section">
+                <h4>🎯 Zone Performance Scorecard</h4>
+                <table class="unit-table">
+                    <thead>
+                        <tr>
+                            <th>Zone</th>
+                            <th>SI Performance</th>
+                            <th>Acceptance Rate</th>
+                            <th>Tokenization Success</th>
+                            <th>RPI (Risk)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="heatmap-tbody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-    <!-- TRENDS VIEW -->
-    <div id="trends" class="view-section">
-        <div class="grid-top" style="grid-template-columns: 1fr;">
-            <div class="card">
-                <h3>7-Day & 30-Day Trend Analysis</h3>
-                <p style="color: var(--text-muted); margin: 10px 0; font-size: 0.9rem;">
-                    Performance trajectory across key zones
-                </p>
-            </div>
-        </div>
-
-        <div class="chart-container">
-            <canvas id="trendChart"></canvas>
-        </div>
-
-        <div class="chart-container">
-            <canvas id="acceptanceChart"></canvas>
-        </div>
-    </div>
-
-    <!-- DRILL-DOWN MODAL -->
-    <div id="drilldownModal" class="modal">
+    <!-- ZONE DRILL-DOWN MODAL -->
+    <div id="zoneModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalRegion">Region Details</h2>
+                <h2 id="modal-zone-name">Zone Details</h2>
                 <button class="close-btn" onclick="closeModal()">&times;</button>
             </div>
-            <div class="transaction-list" id="transactionList"></div>
+            <div class="modal-body">
+                <div class="breadcrumb">
+                    Dashboard > <a onclick="switchView('zones')">Zone Map</a> > <span id="breadcrumb-zone">Zone</span>
+                </div>
+
+                <div class="in-depth-analysis" style="margin-bottom: 20px;">
+                    <h4>📋 Zone Overview</h4>
+                    <div id="zone-overview" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;"></div>
+                </div>
+
+                <h4>🏙️ Unit-Level Breakdown</h4>
+                <table class="unit-table">
+                    <thead>
+                        <tr>
+                            <th>Unit / City</th>
+                            <th>Inspections</th>
+                            <th>Raises</th>
+                            <th>Acceptance %</th>
+                            <th>PR (Tokens)</th>
+                            <th>SI</th>
+                            <th>RPI</th>
+                        </tr>
+                    </thead>
+                    <tbody id="unit-tbody"></tbody>
+                </table>
+
+                <div class="in-depth-analysis" style="margin-top: 20px;">
+                    <h4>🔍 Regional Root Cause Analysis & Trends</h4>
+                    <div id="zone-rca" style="line-height: 1.8;"></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // ===== UTILITY FUNCTIONS =====
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        // ===== DATA =====
+        const zoneData = {
+            'North': {
+                units: [
+                    { city: 'Delhi', insp: 75, raises: 140, acc: 8.2, pr: 45, si: 52, rpi: 1.86 },
+                    { city: 'Chandigarh', insp: 45, raises: 92, acc: 6.5, pr: 28, si: 18, rpi: 2.04 },
+                    { city: 'Lucknow', insp: 52, raises: 108, acc: 7.1, pr: 29, si: 9, rpi: 2.07 }
+                ],
+                rca: '<strong>Trend:</strong> North zone maintains BASELINE status with consistent SI growth of +3.8%. 7-day trend shows steady upward trajectory (2,100 → 2,363). Strong leadership engagement from Aashendra & Dashrath driving consistent results. No critical issues detected. <br><br><strong>Forecast:</strong> Expected to reach 2,500+ SI next month if current trend continues.'
+            },
+            'MH & AP': {
+                units: [
+                    { city: 'Mumbai', insp: 187, raises: 342, acc: 15.3, pr: 36, si: 25, rpi: 1.83 },
+                    { city: 'Pune', insp: 148, raises: 324, acc: 10.7, pr: 19, si: 15, rpi: 2.19 },
+                    { city: 'Hyderabad', insp: 90, raises: 229, acc: 4.2, pr: 5, si: 3, rpi: 2.54 }
+                ],
+                rca: '<strong>Trend:</strong> MH & AP showing mixed performance with -1.6% decline. Mumbai leads acceptance rates (15.3%) but faces tokenization friction. Hyderabad critical with 4.2% acceptance (below 8% threshold). <br><br><strong>Root Cause:</strong> Tokenization delays in Mumbai (backend processing lag), low KYC compliance in Hyderabad (regulatory issue). <br><br><strong>Action Items:</strong> Expedite tokenization service upgrade, conduct KYC drive in Hyderabad.'
+            },
+            'West': {
+                units: [
+                    { city: 'Ahmedabad', insp: 102, raises: 189, acc: 8.1, pr: 12, si: 4, rpi: 1.85 },
+                    { city: 'Surat', insp: 68, raises: 135, acc: 5.4, pr: 7, si: 3, rpi: 1.98 }
+                ],
+                rca: '<strong>Trend:</strong> West zone below baseline with -2.0% decline. 7-day trend shows sustained decline (760 → 734). Low acceptance rates (8.1%, 5.4%) and high rejection rates. <br><br><strong>Root Cause:</strong> Possible quality control issues or staffing shortage. Ahmedabad low SI despite high inspections (102 insp → 4 SI) suggests funnel leakage. <br><br><strong>Action Items:</strong> Process audit, team realignment, quality check enhancement.'
+            },
+            'BLR': {
+                units: [
+                    { city: 'Bangalore', insp: 238, raises: 354, acc: 17.1, pr: 34, si: 32, rpi: 1.49 }
+                ],
+                rca: '<strong>Trend:</strong> BLR CRITICAL with -7.3% decline and payment gateway failure. 34 acceptances failed tokenization causing A2C collapse (59.6% → 27.7%). 7-day trend shows sharp downward curve. <br><br><strong>Root Cause:</strong> Payment processor outage or compliance gate. <br><br><strong>URGENT Action:</strong> Contact payment acquirer, activate backup processor, verify compliance settings. Estimated recovery: 24-48 hours.'
+            },
+            'East': {
+                units: [
+                    { city: 'Kolkata', insp: 120, raises: 210, acc: 6.8, pr: 18, si: 12, rpi: 1.75 },
+                    { city: 'Bhubaneswar', insp: 85, raises: 156, acc: 5.2, pr: 8, si: 5, rpi: 1.84 }
+                ],
+                rca: '<strong>Trend:</strong> East zone slightly above baseline with +0.7% growth. Moderate acceptance rates (6.8%, 5.2%). No critical issues detected. <br><br><strong>Forecast:</strong> Stable zone. Monitor for potential decline in next cycle.'
+            },
+            'South': {
+                units: [
+                    { city: 'Chennai', insp: 102, raises: 189, acc: 8.1, pr: 12, si: 4, rpi: 1.85 },
+                    { city: 'Bangalore', insp: 120, raises: 145, acc: 6.2, pr: 9, si: 6, rpi: 1.21 },
+                    { city: 'Coimbatore', insp: 75, raises: 108, acc: 4.8, pr: 5, si: 2, rpi: 1.44 }
+                ],
+                rca: '<strong>Trend:</strong> South zone below baseline with -1.1% decline. Distributed operations across 3 cities. Low SI/Inspection ratio indicates funnel issues. <br><br><strong>Root Cause:</strong> Possible lack of consolidated leadership. <br><br><strong>Action Items:</strong> Strengthen regional leadership, consolidate processes, implement unified quality standards.'
+            }
+        };
+
+        // ===== UI FUNCTIONS =====
+        function switchView(viewId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
             event.target.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
+            document.getElementById(viewId).classList.add('active');
 
-            if (tabId === 'trends') {
+            if (viewId === 'analysis') {
                 setTimeout(() => {
-                    trendChart.resize();
-                    acceptanceChart.resize();
+                    if (window.regionalTrendChart) regionalTrendChart.resize();
+                    if (window.correlationChart) correlationChart.resize();
                 }, 100);
             }
         }
 
-        function updateTimestamp() {
-            const now = new Date();
-            document.getElementById('current-time').textContent = 
-                now.toLocaleString('en-GB', { 
-                    day: '2-digit', 
-                    month: 'short', 
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                }).toUpperCase();
-            document.getElementById('update-status').innerHTML = 
-                `Last refresh: just now`;
-        }
+        function openZoneModal(zone) {
+            document.getElementById('modal-zone-name').textContent = `${zone} · In-Depth Analysis`;
+            document.getElementById('breadcrumb-zone').textContent = zone;
 
-        // Simulated real-time updates
-        setInterval(updateTimestamp, 60000);
-        updateTimestamp();
+            const data = zoneData[zone];
+            
+            // Overview metrics
+            const overview = document.getElementById('zone-overview');
+            const totalInsp = data.units.reduce((a,u) => a + u.insp, 0);
+            const totalRaises = data.units.reduce((a,u) => a + u.raises, 0);
+            const totalSI = data.units.reduce((a,u) => a + u.si, 0);
+            const avgAcc = (data.units.reduce((a,u) => a + parseFloat(u.acc), 0) / data.units.length).toFixed(1);
 
-        // ===== DATA =====
-        const leadershipData = [
-            { zone: "North", leader: "Aashendra & Dashrath", mtd: 2363, lmtd: 2277, uplift: "+3.8%", tier: "BASELINE", statusClass: "status-amber" },
-            { zone: "MH & AP", leader: "Amitesh & Abhinav", mtd: 1133, lmtd: 1152, uplift: "-1.6%", tier: "BELOW BASELINE", statusClass: "status-red" },
-            { zone: "West", leader: "Ranish & Deepak", mtd: 734, lmtd: 749, uplift: "-2.0%", tier: "BELOW BASELINE", statusClass: "status-red" },
-            { zone: "BLR", leader: "Edwin", mtd: 483, lmtd: 521, uplift: "-7.3%", tier: "BELOW BASELINE", statusClass: "status-red" },
-            { zone: "East", leader: "Suvodip", mtd: 443, lmtd: 440, uplift: "+0.7%", tier: "BELOW BASELINE", statusClass: "status-red" },
-            { zone: "South", leader: "Thiru", mtd: 349, lmtd: 353, uplift: "-1.1%", tier: "BELOW BASELINE", statusClass: "status-red" }
-        ];
-
-        const regionalData = [
-            { region: "NDL", insp: 190, raises: 1761, acc: "6.7%", pr: 102, si: 79, status: "critical", rpi: 9.26 },
-            { region: "MUM", insp: 187, raises: 342, acc: "15.3%", pr: 36, si: 25, status: "warning", rpi: 1.83 },
-            { region: "BLR", insp: 238, raises: 354, acc: "17.1%", pr: 34, si: 32, status: "warning", rpi: 1.49 },
-            { region: "PUN", insp: 148, raises: 324, acc: "10.7%", pr: 19, si: 15, status: "normal", rpi: 2.19 },
-            { region: "NHR", insp: 90, raises: 229, acc: "4.2%", pr: 5, si: 3, status: "critical", rpi: 2.54 },
-            { region: "CHN", insp: 102, raises: 189, acc: "8.1%", pr: 12, si: 4, status: "warning", rpi: 1.85 }
-        ];
-
-        const trendData = {
-            days: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
-            North: [2100, 2150, 2200, 2250, 2290, 2330, 2363],
-            'MH & AP': [1280, 1260, 1200, 1170, 1145, 1140, 1133],
-            West: [760, 755, 750, 745, 740, 737, 734],
-            BLR: [530, 520, 515, 505, 495, 490, 483]
-        };
-
-        const acceptanceData = {
-            days: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
-            acceptance: [8.2, 8.9, 9.5, 10.1, 11.2, 12.0, 12.4],
-            tokenization: [85, 83, 81, 79, 78, 77, 75]
-        };
-
-        const transactionData = {
-            NDL: [
-                { id: 'TXN001', type: 'Inspection', status: 'Completed', time: '14:32', value: 'Pass' },
-                { id: 'TXN002', type: 'Raise', status: 'Pending', time: '14:28', value: 'Quality Issue' },
-                { id: 'TXN003', type: 'Acceptance', status: 'Failed', time: '14:22', value: 'RPI Mismatch' },
-                { id: 'TXN004', type: 'Tokenization', status: 'Completed', time: '14:15', value: 'Approved' }
-            ],
-            MUM: [
-                { id: 'TXN005', type: 'Acceptance', status: 'Completed', time: '14:30', value: 'Pass' },
-                { id: 'TXN006', type: 'Tokenization', status: 'Pending', time: '14:25', value: 'In Progress' },
-                { id: 'TXN007', type: 'Inspection', status: 'Completed', time: '14:10', value: 'Pass' }
-            ],
-            BLR: [
-                { id: 'TXN008', type: 'Acceptance', status: 'Failed', time: '14:29', value: 'Tokenization Error' },
-                { id: 'TXN009', type: 'Inspection', status: 'Completed', time: '14:20', value: 'Pass' },
-                { id: 'TXN010', type: 'Raise', status: 'Completed', time: '14:05', value: 'Resolved' }
-            ],
-            PUN: [
-                { id: 'TXN011', type: 'Inspection', status: 'Completed', time: '14:31', value: 'Pass' },
-                { id: 'TXN012', type: 'Acceptance', status: 'Completed', time: '14:24', value: 'Pass' }
-            ],
-            NHR: [
-                { id: 'TXN013', type: 'Raise', status: 'Pending', time: '14:33', value: 'Under Review' }
-            ],
-            CHN: [
-                { id: 'TXN014', type: 'Inspection', status: 'Completed', time: '14:27', value: 'Pass' }
-            ]
-        };
-
-        // ===== POPULATE TABLES =====
-        const lTbody = document.getElementById('leadership-tbody');
-        leadershipData.forEach(r => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><strong>${r.zone}</strong></td>
-                <td>${r.leader}</td>
-                <td>${r.mtd.toLocaleString()}</td>
-                <td>${r.lmtd.toLocaleString()}</td>
-                <td class="${r.uplift.includes('-') ? 'trend-down' : 'trend-up'}">${r.uplift}</td>
-                <td class="${r.statusClass}">${r.tier}</td>
-            `;
-            lTbody.appendChild(tr);
-        });
-
-        const rTbody = document.getElementById('regional-tbody');
-        regionalData.forEach(r => {
-            const tr = document.createElement('tr');
-            tr.classList.add('clickable');
-            tr.onclick = () => openDrilldown(r.region);
-            const statusColor = r.status === 'critical' ? 'status-red' : r.status === 'warning' ? 'status-amber' : 'status-green';
-            tr.innerHTML = `
-                <td><strong>${r.region}</strong></td>
-                <td>${r.insp}</td>
-                <td>${r.raises}</td>
-                <td>${r.acc}</td>
-                <td>${r.pr}</td>
-                <td>${r.si}</td>
-                <td class="${statusColor}">${r.status.toUpperCase()}</td>
-            `;
-            rTbody.appendChild(tr);
-        });
-
-        // ===== ALERT BANNER =====
-        function showAlerts() {
-            const alertContainer = document.getElementById('alert-container');
-            const alertList = document.getElementById('alert-list');
-            alertList.innerHTML = `
-                <li><strong>NDL:</strong> Inspections collapsed 74%, but raises surged to 1,761 (RPI spike to 9.26). Verify if this is data gaming.</li>
-                <li><strong>MUM:</strong> Acceptance spiked to 23%, but A2C% crashed to 13.5%. Tokenization friction detected.</li>
-                <li><strong>BLR:</strong> 34 acceptances failed to tokenize. A2C dropped to 27.7% from 59.6%.</li>
-            `;
-            alertContainer.style.display = 'block';
-        }
-
-        // ===== DRILL-DOWN MODAL =====
-        function openDrilldown(region) {
-            document.getElementById('modalRegion').textContent = `${region} · Transaction Details`;
-            const transactionList = document.getElementById('transactionList');
-            const transactions = transactionData[region] || [];
-
-            transactionList.innerHTML = transactions.map(t => `
-                <div class="transaction-item">
-                    <strong>${t.id}</strong> · ${t.type} · <span class="${t.status === 'Completed' ? 'status-green' : t.status === 'Pending' ? 'status-amber' : 'status-red'}">${t.status}</span>
-                    <br><small>Time: ${t.time} | Value: ${t.value}</small>
+            overview.innerHTML = `
+                <div style="background: linear-gradient(135deg, #fff9e6, #fffbf0); padding: 15px; border-radius: 6px; border-left: 4px solid var(--cars24-secondary);">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">Total Inspections</div>
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--cars24-primary);">${totalInsp}</div>
                 </div>
+                <div style="background: linear-gradient(135deg, #ffe0b2, #ffcc80); padding: 15px; border-radius: 6px; border-left: 4px solid var(--cars24-secondary);">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">Total Raises</div>
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--cars24-primary);">${totalRaises}</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); padding: 15px; border-radius: 6px; border-left: 4px solid var(--cars24-accent);">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">Total SI</div>
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--cars24-primary);">${totalSI}</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #b3e5fc, #81d4fa); padding: 15px; border-radius: 6px; border-left: 4px solid var(--cars24-accent);">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">Avg Acceptance %</div>
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--cars24-primary);">${avgAcc}%</div>
+                </div>
+            `;
+
+            // Unit table
+            const tbody = document.getElementById('unit-tbody');
+            tbody.innerHTML = data.units.map(u => `
+                <tr>
+                    <td><strong>${u.city}</strong></td>
+                    <td>${u.insp}</td>
+                    <td>${u.raises}</td>
+                    <td>${u.acc}%</td>
+                    <td>${u.pr}</td>
+                    <td>${u.si}</td>
+                    <td>${u.rpi.toFixed(2)}</td>
+                </tr>
             `).join('');
 
-            document.getElementById('drilldownModal').classList.add('active');
+            // RCA
+            document.getElementById('zone-rca').innerHTML = data.rca;
+
+            document.getElementById('zoneModal').classList.add('active');
         }
 
         function closeModal() {
-            document.getElementById('drilldownModal').classList.remove('active');
+            document.getElementById('zoneModal').classList.remove('active');
         }
 
+        function openZoneModal(zone) {
+            // Find matching zone in data
+            const actualZone = zone === 'NDL' ? 'North' : zone === 'MUM' ? 'MH & AP' : zone === 'CHN' ? 'West' : zone;
+            
+            document.getElementById('modal-zone-name').textContent = `${zone} / ${actualZone} · In-Depth Analysis`;
+            document.getElementById('breadcrumb-zone').textContent = zone;
+
+            const data = zoneData[actualZone];
+            if (!data) return;
+            
+            const overview = document.getElementById('zone-overview');
+            const totalInsp = data.units.reduce((a,u) => a + u.insp, 0);
+            const totalRaises = data.units.reduce((a,u) => a + u.raises, 0);
+            const totalSI = data.units.reduce((a,u) => a + u.si, 0);
+            const avgAcc = (data.units.reduce((a,u) => a + parseFloat(u.acc), 0) / data.units.length).toFixed(1);
+
+            overview.innerHTML = `
+                <div style="background: linear-gradient(135deg, #fff9e6, #fffbf0); padding: 15px; border-radius: 6px; border-left: 4px solid var(--cars24-secondary);">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">Total Inspections</div>
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--cars24-primary);">${totalInsp}</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #ffe0b2, #ffcc80); padding: 15px; border-radius: 6px; border-left: 4px solid var(--cars24-secondary);">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">Total Raises</div>
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--cars24-primary);">${totalRaises}</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); padding: 15px; border-radius: 6px; border-left: 4px solid var(--cars24-accent);">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">Total SI</div>
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--cars24-primary);">${totalSI}</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #b3e5fc, #81d4fa); padding: 15px; border-radius: 6px; border-left: 4px solid var(--cars24-accent);">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">Avg Acceptance %</div>
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--cars24-primary);">${avgAcc}%</div>
+                </div>
+            `;
+
+            const tbody = document.getElementById('unit-tbody');
+            tbody.innerHTML = data.units.map(u => `
+                <tr>
+                    <td><strong>${u.city}</strong></td>
+                    <td>${u.insp}</td>
+                    <td>${u.raises}</td>
+                    <td>${u.acc}%</td>
+                    <td>${u.pr}</td>
+                    <td>${u.si}</td>
+                    <td>${u.rpi.toFixed(2)}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('zone-rca').innerHTML = data.rca;
+            document.getElementById('zoneModal').classList.add('active');
+        }
+
+        function manualSync() {
+            alert('🔄 Manual sync initiated. Connecting to Snowflake...\n\nIn production, this would trigger:\n1. Query to Snowflake warehouse\n2. Extract latest inventory data (inspections, raises, acceptances, tokenizations)\n3. Run RCA analysis scripts\n4. Update all visualizations & heatmaps\n5. Log sync event with timestamp');
+            document.getElementById('next-sync').textContent = 'Syncing...';
+            setTimeout(() => {
+                document.getElementById('next-sync').textContent = '02:32 (in 8h)';
+            }, 2000);
+        }
+
+        function exportReport() {
+            alert('📥 Exporting full report...\n\nAvailable formats:\n✓ PDF (Newspaper format with charts)\n✓ CSV (Detailed zone & unit data)\n✓ XLSX (Excel workbook with analysis sheets)\n✓ JSON (Raw API format for integration)');
+        }
+
+        function updateTimestamp() {
+            const now = new Date();
+            document.getElementById('sync-time').textContent = now.toLocaleString('en-GB', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }).toUpperCase();
+        }
+
+        // ===== CHARTS =====
+        function initCharts() {
+            const trendCtx = document.getElementById('regionalTrendChart').getContext('2d');
+            window.regionalTrendChart = new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
+                    datasets: [
+                        {
+                            label: 'North SI',
+                            data: [2100, 2150, 2200, 2250, 2290, 2330, 2363],
+                            borderColor: '#e63946',
+                            backgroundColor: 'rgba(230, 57, 70, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'BLR SI',
+                            data: [530, 520, 515, 505, 495, 490, 483],
+                            borderColor: '#d32f2f',
+                            backgroundColor: 'rgba(211, 47, 47, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'MH & AP SI',
+                            data: [1280, 1260, 1200, 1170, 1145, 1140, 1133],
+                            borderColor: '#f77f00',
+                            backgroundColor: 'rgba(247, 127, 0, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'top' } }
+                }
+            });
+
+            const corrCtx = document.getElementById('correlationChart').getContext('2d');
+            window.correlationChart = new Chart(corrCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['North', 'MH & AP', 'West', 'BLR', 'East', 'South'],
+                    datasets: [
+                        {
+                            label: 'Acceptance %',
+                            data: [7.8, 10.1, 6.8, 17.1, 6.0, 6.4],
+                            backgroundColor: 'rgba(230, 57, 70, 0.7)'
+                        },
+                        {
+                            label: 'Tokenization Success %',
+                            data: [82, 65, 71, 27, 68, 62],
+                            backgroundColor: 'rgba(6, 167, 125, 0.7)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 100 }
+                    }
+                }
+            });
+        }
+
+        function populateHeatmap() {
+            const tbody = document.getElementById('heatmap-tbody');
+            const data = [
+                { zone: 'North', si: '+3.8%', acc: '7.8%', token: '82%', rpi: '1.87', status: 'warning' },
+                { zone: 'MH & AP', si: '-1.6%', acc: '10.1%', token: '65%', rpi: '2.19', status: 'critical' },
+                { zone: 'West', si: '-2.0%', acc: '6.8%', token: '71%', rpi: '1.91', status: 'critical' },
+                { zone: 'BLR', si: '-7.3%', acc: '17.1%', token: '27%', rpi: '1.49', status: 'critical' },
+                { zone: 'East', si: '+0.7%', acc: '6.0%', token: '68%', rpi: '1.79', status: 'critical' },
+                { zone: 'South', si: '-1.1%', acc: '6.4%', token: '62%', rpi: '1.50', status: 'critical' }
+            ];
+
+            tbody.innerHTML = data.map(d => `
+                <tr>
+                    <td><strong>${d.zone}</strong></td>
+                    <td style="color: ${d.si.includes('-') ? 'var(--red-alert)' : 'var(--green-ok)'}; font-weight: 700;">${d.si}</td>
+                    <td>${d.acc}</td>
+                    <td style="background: ${d.token.includes('2') || d.token.includes('4') || d.token.includes('6') ? 'rgba(211, 47, 47, 0.1)' : 'rgba(46, 125, 50, 0.1)'}; font-weight: 700;">${d.token}</td>
+                    <td>${d.rpi}</td>
+                    <td><span class="status-badge status-${d.status}">${d.status}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        // ===== INITIALIZE =====
         window.onclick = function(event) {
-            const modal = document.getElementById('drilldownModal');
+            const modal = document.getElementById('zoneModal');
             if (event.target === modal) {
                 modal.classList.remove('active');
             }
         }
 
-        // ===== CHARTS =====
-        const trendCtx = document.getElementById('trendChart').getContext('2d');
-        const trendChart = new Chart(trendCtx, {
-            type: 'line',
-            data: {
-                labels: trendData.days,
-                datasets: [
-                    {
-                        label: 'North',
-                        data: trendData.North,
-                        borderColor: '#e63946',
-                        backgroundColor: 'rgba(230, 57, 70, 0.1)',
-                        tension: 0.4,
-                        fill: true,
-                        pointBackgroundColor: '#e63946'
-                    },
-                    {
-                        label: 'MH & AP',
-                        data: trendData['MH & AP'],
-                        borderColor: '#f77f00',
-                        backgroundColor: 'rgba(247, 127, 0, 0.1)',
-                        tension: 0.4,
-                        fill: true,
-                        pointBackgroundColor: '#f77f00'
-                    },
-                    {
-                        label: 'West',
-                        data: trendData.West,
-                        borderColor: '#06a77d',
-                        backgroundColor: 'rgba(6, 167, 125, 0.1)',
-                        tension: 0.4,
-                        fill: false,
-                        pointBackgroundColor: '#06a77d'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'top' }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: { display: true, text: 'Stock-ins (SI)' }
-                    }
-                }
-            }
-        });
-
-        const acceptanceCtx = document.getElementById('acceptanceChart').getContext('2d');
-        const acceptanceChart = new Chart(acceptanceCtx, {
-            type: 'bar',
-            data: {
-                labels: acceptanceData.days,
-                datasets: [
-                    {
-                        label: 'Acceptance %',
-                        data: acceptanceData.acceptance,
-                        backgroundColor: '#e63946',
-                        borderColor: '#c1121f',
-                        borderWidth: 2
-                    },
-                    {
-                        label: 'Tokenization Success %',
-                        data: acceptanceData.tokenization,
-                        backgroundColor: '#06a77d',
-                        borderColor: '#048659',
-                        borderWidth: 2
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'top' }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100
-                    }
-                }
-            }
-        });
-
-        // ===== EXPORT FUNCTIONS =====
-        function exportCSV() {
-            let csv = 'CARS24 Inventory Ops Dashboard - Data Export\n';
-            csv += `Generated: ${new Date().toLocaleString()}\n\n`;
-            csv += 'LEADERSHIP DATA\n';
-            csv += 'Zone,Leader,MTD SI,LMTD SI,Uplift %,Tier\n';
-            
-            leadershipData.forEach(r => {
-                csv += `${r.zone},${r.leader},${r.mtd},${r.lmtd},${r.uplift},${r.tier}\n`;
-            });
-
-            csv += '\nREGIONAL DATA\n';
-            csv += 'Region,Inspections,Raises,Acceptance %,PR,SI,Status\n';
-            
-            regionalData.forEach(r => {
-                csv += `${r.region},${r.insp},${r.raises},${r.acc},${r.pr},${r.si},${r.status}\n`;
-            });
-
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `CARS24_Inventory_Ops_${new Date().toISOString().slice(0,10)}.csv`;
-            a.click();
-        }
-
-        function exportPDF() {
-            const element = document.body;
-            const opt = {
-                margin: 10,
-                filename: `CARS24_Inventory_Ops_${new Date().toISOString().slice(0,10)}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
-            };
-            html2pdf().set(opt).from(element).save();
-        }
-
-        // ===== INITIALIZE =====
-        showAlerts();
+        updateTimestamp();
+        populateHeatmap();
+        setTimeout(initCharts, 1000);
     </script>
 </body>
 </html>
